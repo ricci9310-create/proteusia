@@ -40,7 +40,7 @@ export default function Home() {
             {!chatStarted && (
               <div className="text-center mb-8 chat-message-enter">
                 <div className="inline-flex items-center gap-2 mb-6">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 pulse-ring relative" />
+                  <div className="w-2 h-2 rounded-full bg-amber-400 pulse-ring relative" />
                   <span className="text-xs tracking-[0.2em] uppercase text-white/30 font-mono">
                     PROTEUS IA
                   </span>

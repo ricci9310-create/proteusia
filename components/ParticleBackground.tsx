@@ -51,9 +51,9 @@ export default function ParticleBackground() {
 
       // Glow
       const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4);
-      gradient.addColorStop(0, `rgba(79, 143, 255, ${alpha * 0.8})`);
-      gradient.addColorStop(0.5, `rgba(34, 211, 238, ${alpha * 0.3})`);
-      gradient.addColorStop(1, 'rgba(79, 143, 255, 0)');
+      gradient.addColorStop(0, `rgba(212, 168, 83, ${alpha * 0.8})`);
+      gradient.addColorStop(0.5, `rgba(240, 192, 96, ${alpha * 0.3})`);
+      gradient.addColorStop(1, 'rgba(212, 168, 83, 0)');
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2);
@@ -63,7 +63,7 @@ export default function ParticleBackground() {
       // Core
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(200, 220, 255, ${alpha})`;
+      ctx.fillStyle = `rgba(255, 225, 170, ${alpha})`;
       ctx.fill();
     };
 
@@ -80,7 +80,7 @@ export default function ParticleBackground() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(79, 143, 255, ${alpha * pulse})`;
+            ctx.strokeStyle = `rgba(212, 168, 83, ${alpha * pulse})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -96,7 +96,7 @@ export default function ParticleBackground() {
         canvas.width / 2, canvas.height / 2, 0,
         canvas.width / 2, canvas.height / 2, canvas.width * 0.7
       );
-      bgGrad.addColorStop(0, 'rgba(10, 15, 40, 0.3)');
+      bgGrad.addColorStop(0, 'rgba(25, 18, 5, 0.3)');
       bgGrad.addColorStop(1, 'rgba(3, 3, 8, 0)');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);

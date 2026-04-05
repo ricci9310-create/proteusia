@@ -62,7 +62,7 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
         <p className="text-white/50 text-sm mb-6">
           Te contactaremos muy pronto.
         </p>
-        <p className="text-blue-400/60 text-xs font-mono">— PROTEUS</p>
+        <p className="text-amber-400/60 text-xs font-mono">— PROTEUS</p>
       </div>
     );
   }
@@ -83,14 +83,14 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
           placeholder="Tu nombre"
           value={contactInfo.name}
           onChange={(e) => setContactInfo({ ...contactInfo, name: e.target.value })}
-          className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 focus:outline-none focus:border-blue-500/40"
+          className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 focus:outline-none focus:border-amber-500/40"
         />
         <input
           type="email"
           placeholder="Tu email"
           value={contactInfo.email}
           onChange={(e) => setContactInfo({ ...contactInfo, email: e.target.value })}
-          className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 focus:outline-none focus:border-blue-500/40"
+          className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 focus:outline-none focus:border-amber-500/40"
         />
         {selectedAction === 'call' && (
           <input
@@ -98,7 +98,7 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
             placeholder="Tu teléfono"
             value={contactInfo.phone}
             onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
-            className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 focus:outline-none focus:border-blue-500/40"
+            className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/25 focus:outline-none focus:border-amber-500/40"
           />
         )}
 
@@ -112,7 +112,7 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
           <button
             onClick={handleSubmit}
             disabled={!contactInfo.name || !contactInfo.email || isSubmitting}
-            className="flex-1 py-3 rounded-xl text-sm text-white bg-blue-500/20 border border-blue-500/30 hover:bg-blue-500/30 transition-all disabled:opacity-40"
+            className="flex-1 py-3 rounded-xl text-sm text-white bg-amber-500/20 border border-amber-500/30 hover:bg-amber-500/30 transition-all disabled:opacity-40"
           >
             {isSubmitting ? 'Enviando...' : 'Enviar'}
           </button>
@@ -125,7 +125,7 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
     <div className="chat-message-enter space-y-4 max-w-lg mx-auto">
       {/* Score Display */}
       <div className="text-center mb-6">
-        <p className="text-xs text-blue-400/50 font-mono mb-3">DIAGNÓSTICO COMPLETADO</p>
+        <p className="text-xs text-amber-400/50 font-mono mb-3">DIAGNÓSTICO COMPLETADO</p>
         <div className="inline-flex items-center gap-3 bg-white/[0.03] border border-white/[0.06] rounded-xl px-5 py-3">
           <div className="text-2xl font-bold gradient-text">{leadProfile.score}/10</div>
           <div className="text-left">
@@ -135,7 +135,7 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
                 className="h-full rounded-full score-fill"
                 style={{
                   width: `${leadProfile.score * 10}%`,
-                  background: `linear-gradient(90deg, #4f8fff, #22d3ee)`,
+                  background: `linear-gradient(90deg, #c8922a, #f0c060)`,
                 }}
               />
             </div>

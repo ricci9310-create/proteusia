@@ -4,9 +4,9 @@
 
 :root {
   --bg: #030308;
-  --proteus-blue: #4f8fff;
-  --proteus-cyan: #22d3ee;
-  --proteus-violet: #8b5cf6;
+  --proteus-gold: #d4a853;
+  --proteus-amber: #f0c060;
+  --proteus-warm: #c8922a;
 }
 
 body {
@@ -30,12 +30,12 @@ html {
 /* ========== BREATHING INPUT ========== */
 @keyframes breathe {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(79, 143, 255, 0.1), 0 0 60px rgba(79, 143, 255, 0.05);
-    border-color: rgba(79, 143, 255, 0.2);
+    box-shadow: 0 0 20px rgba(212, 168, 83, 0.08), 0 0 60px rgba(212, 168, 83, 0.03);
+    border-color: rgba(212, 168, 83, 0.15);
   }
   50% {
-    box-shadow: 0 0 30px rgba(79, 143, 255, 0.25), 0 0 80px rgba(79, 143, 255, 0.1);
-    border-color: rgba(79, 143, 255, 0.4);
+    box-shadow: 0 0 30px rgba(212, 168, 83, 0.2), 0 0 80px rgba(212, 168, 83, 0.08);
+    border-color: rgba(212, 168, 83, 0.35);
   }
 }
 
@@ -45,8 +45,49 @@ html {
 
 .input-breathing:focus {
   animation: none;
-  box-shadow: 0 0 40px rgba(79, 143, 255, 0.3), 0 0 100px rgba(79, 143, 255, 0.15);
-  border-color: rgba(79, 143, 255, 0.5);
+  box-shadow: 0 0 40px rgba(212, 168, 83, 0.25), 0 0 100px rgba(212, 168, 83, 0.1);
+  border-color: rgba(212, 168, 83, 0.45);
+}
+
+/* ========== TRAVELING LIGHT BORDER (thinking state) ========== */
+@keyframes border-travel {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.input-thinking {
+  position: relative;
+}
+
+.input-thinking::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 1.1rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 30%,
+    rgba(212, 168, 83, 0.6) 45%,
+    rgba(240, 192, 96, 0.9) 50%,
+    rgba(212, 168, 83, 0.6) 55%,
+    transparent 70%,
+    transparent 100%
+  );
+  background-size: 300% 100%;
+  animation: border-travel 2s linear infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.input-thinking::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: #030308;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* ========== TYPING INDICATOR ========== */
@@ -66,7 +107,7 @@ html {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, #4f8fff, #22d3ee, #8b5cf6);
+  background-image: linear-gradient(135deg, #d4a853, #f0c060, #c8922a);
 }
 
 /* ========== PULSE RING ========== */
@@ -80,7 +121,7 @@ html {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 2px solid rgba(79, 143, 255, 0.4);
+  border: 2px solid rgba(212, 168, 83, 0.4);
   animation: pulse-ring 2s ease-out infinite;
 }
 
@@ -96,8 +137,8 @@ html {
 
 /* ========== MORPHING TEXT ========== */
 @keyframes morph-glow {
-  0%, 100% { text-shadow: 0 0 20px rgba(79, 143, 255, 0.3); }
-  50% { text-shadow: 0 0 40px rgba(79, 143, 255, 0.6), 0 0 80px rgba(34, 211, 238, 0.2); }
+  0%, 100% { text-shadow: 0 0 20px rgba(212, 168, 83, 0.3); }
+  50% { text-shadow: 0 0 40px rgba(212, 168, 83, 0.5), 0 0 80px rgba(240, 192, 96, 0.15); }
 }
 
 .morph-text {
@@ -134,8 +175,8 @@ html {
 
 .portfolio-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(79, 143, 255, 0.2);
-  box-shadow: 0 20px 60px rgba(79, 143, 255, 0.08);
+  border-color: rgba(212, 168, 83, 0.2);
+  box-shadow: 0 20px 60px rgba(212, 168, 83, 0.06);
 }
 
 /* ========== SPEAKING INDICATOR ========== */
@@ -146,7 +187,7 @@ html {
 
 .sound-bar {
   width: 3px;
-  background: linear-gradient(to top, #4f8fff, #22d3ee);
+  background: linear-gradient(to top, #c8922a, #f0c060);
   border-radius: 2px;
   animation: sound-wave 0.8s ease-in-out infinite;
 }
@@ -169,11 +210,11 @@ html {
 }
 
 .cta-btn:hover {
-  background: rgba(79, 143, 255, 0.1);
-  border-color: rgba(79, 143, 255, 0.3);
+  background: rgba(212, 168, 83, 0.08);
+  border-color: rgba(212, 168, 83, 0.25);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(79, 143, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(212, 168, 83, 0.12);
 }
 
 /* ========== SCORE METER ========== */

@@ -138,7 +138,7 @@ export default function Portfolio({ onBack }: Props) {
               {project.tags.map((tag, j) => (
                 <span
                   key={j}
-                  className="text-[9px] px-2 py-0.5 rounded bg-blue-500/5 text-blue-400/40 font-mono"
+                  className="text-[9px] px-2 py-0.5 rounded bg-amber-500/5 text-amber-400/40 font-mono"
                 >
                   {tag}
                 </span>
@@ -152,7 +152,7 @@ export default function Portfolio({ onBack }: Props) {
       <div className="text-center mt-12">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-sm text-blue-400/80 hover:bg-blue-500/20 hover:text-blue-300 transition-all"
+          className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-400/80 hover:bg-amber-500/20 hover:text-amber-300 transition-all"
         >
           Quiero algo así — hablar con Proteus
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
