@@ -36,39 +36,54 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
   const [questionCount, setQuestionCount] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const synthRef = useRef<SpeechSynthesis | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      synthRef.current = window.speechSynthesis;
-    }
-  }, []);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const speak = (text: string) => {
-    if (!synthRef.current) return;
-    synthRef.current.cancel();
+  const speak = async (text: string) => {
+    // Stop any current audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-MX';
-    utterance.rate = 1.25;
-    utterance.pitch = 1.0;
+    setIsSpeaking(true);
 
-    // Try to find a natural Spanish voice
-    const voices = synthRef.current.getVoices();
-    const spanishVoice = voices.find(
-      (v) => v.lang.startsWith('es') && (v.name.includes('Google') || v.name.includes('Microsoft'))
-    ) || voices.find((v) => v.lang.startsWith('es'));
-    if (spanishVoice) utterance.voice = spanishVoice;
+    try {
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
 
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
+      if (!response.ok) {
+        setIsSpeaking(false);
+        return;
+      }
 
-    synthRef.current.speak(utterance);
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+
+      audio.onended = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        audioRef.current = null;
+      };
+
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        audioRef.current = null;
+      };
+
+      await audio.play();
+    } catch {
+      setIsSpeaking(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
