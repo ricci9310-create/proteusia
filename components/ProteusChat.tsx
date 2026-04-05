@@ -49,9 +49,9 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
       audioRef.current = null;
     }
 
-    setIsSpeaking(true);
-
     try {
+      setIsSpeaking(true);
+
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,11 +59,25 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
       });
 
       if (!response.ok) {
+        console.warn('TTS failed:', response.status);
+        setIsSpeaking(false);
+        return;
+      }
+
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('audio')) {
+        console.warn('TTS returned non-audio response:', contentType);
         setIsSpeaking(false);
         return;
       }
 
       const audioBlob = await response.blob();
+      if (audioBlob.size < 100) {
+        console.warn('TTS returned empty audio');
+        setIsSpeaking(false);
+        return;
+      }
+
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
       audioRef.current = audio;
@@ -75,13 +89,19 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
       };
 
       audio.onerror = () => {
+        console.warn('Audio playback error');
         setIsSpeaking(false);
         URL.revokeObjectURL(audioUrl);
         audioRef.current = null;
       };
 
-      await audio.play();
-    } catch {
+      // Play - may fail if browser blocks autoplay
+      await audio.play().catch(() => {
+        console.warn('Autoplay blocked by browser');
+        setIsSpeaking(false);
+      });
+    } catch (err) {
+      console.warn('TTS error:', err);
       setIsSpeaking(false);
     }
   };

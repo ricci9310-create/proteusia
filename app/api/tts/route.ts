@@ -1,18 +1,25 @@
 import { NextResponse } from 'next/server';
 
-// Voice: "Carlos" - warm, deep Latin American male voice
-const VOICE_ID = '4FMxnogu8ehUVsRIxx9H';
+// Premade voice "Daniel" - calm, authoritative male
+const VOICE_ID = 'onwK4e9ZLuTAKqWW03F9';
 
 export async function POST(req: Request) {
   try {
     const { text } = await req.json();
 
-    if (!text || !process.env.ELEVENLABS_API_KEY) {
-      return NextResponse.json({ error: 'Missing text or API key' }, { status: 400 });
+    if (!text) {
+      return NextResponse.json({ error: 'Missing text' }, { status: 400 });
     }
 
+    if (!process.env.ELEVENLABS_API_KEY) {
+      console.error('ELEVENLABS_API_KEY not configured');
+      return NextResponse.json({ error: 'TTS not configured' }, { status: 500 });
+    }
+
+    console.log('TTS request for text:', text.substring(0, 50) + '...');
+
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}?output_format=mp3_44100_128`,
+      `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}?output_format=mp3_22050_32`,
       {
         method: 'POST',
         headers: {
@@ -23,9 +30,8 @@ export async function POST(req: Request) {
           text,
           model_id: 'eleven_multilingual_v2',
           voice_settings: {
-            stability: 0.6,
-            similarity_boost: 0.8,
-            style: 0.3,
+            stability: 0.5,
+            similarity_boost: 0.75,
           },
         }),
       }
@@ -34,14 +40,16 @@ export async function POST(req: Request) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('ElevenLabs error:', response.status, errorText);
-      return NextResponse.json({ error: 'TTS failed' }, { status: 500 });
+      return NextResponse.json({ error: 'TTS failed', detail: errorText }, { status: response.status });
     }
 
     const audioBuffer = await response.arrayBuffer();
+    console.log('TTS audio generated, size:', audioBuffer.byteLength);
 
     return new Response(audioBuffer, {
       headers: {
         'Content-Type': 'audio/mpeg',
+        'Content-Length': audioBuffer.byteLength.toString(),
         'Cache-Control': 'no-cache',
       },
     });
