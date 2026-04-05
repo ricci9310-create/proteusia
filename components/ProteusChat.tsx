@@ -53,14 +53,14 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
     synthRef.current.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-CO';
-    utterance.rate = 0.95;
-    utterance.pitch = 0.9;
+    utterance.lang = 'es-MX';
+    utterance.rate = 1.25;
+    utterance.pitch = 1.0;
 
-    // Try to find a good Spanish voice
+    // Try to find a natural Spanish voice
     const voices = synthRef.current.getVoices();
     const spanishVoice = voices.find(
-      (v) => v.lang.startsWith('es') && v.name.toLowerCase().includes('male')
+      (v) => v.lang.startsWith('es') && (v.name.includes('Google') || v.name.includes('Microsoft'))
     ) || voices.find((v) => v.lang.startsWith('es'));
     if (spanishVoice) utterance.voice = spanishVoice;
 

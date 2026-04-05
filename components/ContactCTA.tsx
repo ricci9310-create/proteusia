@@ -57,10 +57,10 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
         </div>
         <h3 className="text-xl font-semibold text-white mb-2">Tu perfil ha sido creado</h3>
         <p className="text-white/50 text-sm mb-1">
-          He enviado la esencia de nuestra conversación a tu correo.
+          Nuestro equipo ya tiene tu diagnóstico completo.
         </p>
         <p className="text-white/50 text-sm mb-6">
-          Mis arquitectos humanos ya tienen todo en sus manos.
+          Te contactaremos muy pronto.
         </p>
         <p className="text-blue-400/60 text-xs font-mono">— PROTEUS</p>
       </div>
