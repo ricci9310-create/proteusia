@@ -135,7 +135,7 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
                 className="h-full rounded-full score-fill"
                 style={{
                   width: `${leadProfile.score * 10}%`,
-                  background: `linear-gradient(90deg, #c8922a, #f0c060)`,
+                  background: `linear-gradient(90deg, #a89868, #e0d0a8)`,
                 }}
               />
             </div>
