@@ -214,7 +214,7 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
                 ? '¿En qué quieres que nos transformemos para tu negocio?'
                 : 'Escribe tu respuesta...'
             }
-            className={`w-full bg-[#030308] border border-white/10 rounded-2xl px-6 py-5 pr-14 text-white placeholder-white/25 text-sm focus:outline-none transition-all duration-500 ${
+            className={`w-full bg-[#030308] border border-white/10 rounded-2xl px-6 py-5 pr-14 text-white placeholder-white/25 text-sm text-center focus:outline-none transition-all duration-500 ${
               messages.length === 0 && !isLoading ? 'input-breathing' : ''
             } ${!isLoading ? 'focus:border-amber-500/40 focus:shadow-[0_0_30px_rgba(212,168,83,0.12)]' : 'border-transparent'}`}
             disabled={isLoading}
