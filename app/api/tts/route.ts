@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-// Premade voice "Daniel" - calm, authoritative male
-const VOICE_ID = 'onwK4e9ZLuTAKqWW03F9';
+// Premade voice "Adam" - dominant, firm, deep (Ultron/Jarvis energy)
+const VOICE_ID = 'pNInz6obpgDQGcFmaJgB';
 
 export async function POST(req: Request) {
   try {
