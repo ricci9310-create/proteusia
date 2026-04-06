@@ -134,7 +134,7 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
       }
 
       if (data.showCTA) {
-        setTimeout(() => setShowCTA(true), 2000);
+        setShowCTA(true);
       }
     } catch {
       setMessages([
