@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+
+type Status = 'LEAD' | 'CONTACTED' | 'PROPOSAL_SENT' | 'NEGOTIATION' | 'WON' | 'LOST';
 
 interface Lead {
   id: string;
@@ -9,6 +11,7 @@ interface Lead {
   email: string;
   phone: string | null;
   action: string;
+  status: Status;
   score: number;
   painLevel: string;
   infrastructure: string;
@@ -20,11 +23,45 @@ interface Lead {
   salesStrategy: string;
 }
 
+type StatusFilter = 'ALL' | Status;
+type ScoreFilter = 'ALL' | 'HOT' | 'WARM' | 'COLD';
+type SortMode = 'recent' | 'score';
+
+const STATUS_CYCLE: Record<Status, Status> = {
+  LEAD: 'CONTACTED',
+  CONTACTED: 'WON',
+  PROPOSAL_SENT: 'WON',
+  NEGOTIATION: 'WON',
+  WON: 'LOST',
+  LOST: 'LEAD',
+};
+
+const STATUS_STYLE: Record<Status, string> = {
+  LEAD: 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+  CONTACTED: 'bg-yellow-500/15 text-yellow-300 border-yellow-500/30',
+  PROPOSAL_SENT: 'bg-violet-500/15 text-violet-300 border-violet-500/30',
+  NEGOTIATION: 'bg-violet-500/15 text-violet-300 border-violet-500/30',
+  WON: 'bg-green-500/15 text-green-300 border-green-500/30',
+  LOST: 'bg-red-500/15 text-red-300 border-red-500/30',
+};
+
+const STATUS_LABEL: Record<Status, string> = {
+  LEAD: 'Nuevo',
+  CONTACTED: 'Contactado',
+  PROPOSAL_SENT: 'Propuesta',
+  NEGOTIATION: 'Negociando',
+  WON: 'Ganado',
+  LOST: 'Perdido',
+};
+
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [password, setPassword] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
+  const [scoreFilter, setScoreFilter] = useState<ScoreFilter>('ALL');
+  const [sortMode, setSortMode] = useState<SortMode>('recent');
 
   const fetchLeads = async () => {
     setLoading(true);
@@ -50,6 +87,48 @@ export default function LeadsPage() {
       return () => clearInterval(interval);
     }
   }, [authenticated, password]);
+
+  const cycleStatus = async (lead: Lead) => {
+    const next = STATUS_CYCLE[lead.status];
+    // optimistic update
+    setLeads((prev) => prev.map((l) => (l.id === lead.id ? { ...l, status: next } : l)));
+    try {
+      const res = await fetch(`/api/leads/${lead.id}?key=${password}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: next }),
+      });
+      if (!res.ok) throw new Error('PATCH failed');
+    } catch {
+      // rollback
+      setLeads((prev) => prev.map((l) => (l.id === lead.id ? { ...l, status: lead.status } : l)));
+      alert('No se pudo actualizar el status');
+    }
+  };
+
+  const kpis = useMemo(() => {
+    const total = leads.length;
+    const hot = leads.filter((l) => l.score >= 8).length;
+    const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const thisWeek = leads.filter((l) => new Date(l.timestamp).getTime() >= oneWeekAgo).length;
+    const withPhone = leads.filter((l) => !!l.phone).length;
+    const phonePct = total === 0 ? 0 : Math.round((withPhone / total) * 100);
+    return { total, hot, thisWeek, phonePct };
+  }, [leads]);
+
+  const filteredLeads = useMemo(() => {
+    let out = leads;
+    if (statusFilter !== 'ALL') out = out.filter((l) => l.status === statusFilter);
+    if (scoreFilter === 'HOT') out = out.filter((l) => l.score >= 8);
+    if (scoreFilter === 'WARM') out = out.filter((l) => l.score >= 6 && l.score < 8);
+    if (scoreFilter === 'COLD') out = out.filter((l) => l.score < 6);
+    if (sortMode === 'recent') {
+      out = [...out].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    } else {
+      out = [...out].sort((a, b) => b.score - a.score);
+    }
+    return out;
+  }, [leads, statusFilter, scoreFilter, sortMode]);
 
   if (!authenticated) {
     return (
@@ -87,26 +166,76 @@ export default function LeadsPage() {
 
   return (
     <div className="min-h-screen bg-[#030308] px-4 py-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div>
             <p className="text-xs font-mono text-blue-400/50">PROTEUS — DASHBOARD</p>
             <h1 className="text-2xl font-bold text-white mt-1">Leads Capturados</h1>
           </div>
-          <div className="text-right">
-            <div className="text-3xl font-bold gradient-text">{leads.length}</div>
-            <div className="text-xs text-white/30">total leads</div>
-          </div>
+          <button
+            onClick={fetchLeads}
+            className="text-xs font-mono px-3 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-all"
+          >
+            Refrescar
+          </button>
         </div>
 
-        {leads.length === 0 ? (
+        {/* KPIs */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <KpiCard label="Total" value={kpis.total} />
+          <KpiCard label="Hot leads (≥8)" value={kpis.hot} accent="green" />
+          <KpiCard label="Esta semana" value={kpis.thisWeek} accent="blue" />
+          <KpiCard label="% con teléfono" value={`${kpis.phonePct}%`} />
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-2 mb-6">
+          <FilterGroup
+            label="Status"
+            value={statusFilter}
+            onChange={(v) => setStatusFilter(v as StatusFilter)}
+            options={[
+              { value: 'ALL', label: 'Todos' },
+              { value: 'LEAD', label: 'Nuevo' },
+              { value: 'CONTACTED', label: 'Contactado' },
+              { value: 'WON', label: 'Ganado' },
+              { value: 'LOST', label: 'Perdido' },
+            ]}
+          />
+          <FilterGroup
+            label="Score"
+            value={scoreFilter}
+            onChange={(v) => setScoreFilter(v as ScoreFilter)}
+            options={[
+              { value: 'ALL', label: 'Todos' },
+              { value: 'HOT', label: 'Hot ≥8' },
+              { value: 'WARM', label: 'Warm 6-7' },
+              { value: 'COLD', label: 'Cold ≤5' },
+            ]}
+          />
+          <FilterGroup
+            label="Orden"
+            value={sortMode}
+            onChange={(v) => setSortMode(v as SortMode)}
+            options={[
+              { value: 'recent', label: 'Recientes' },
+              { value: 'score', label: 'Score' },
+            ]}
+          />
+        </div>
+
+        {filteredLeads.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-white/30 text-sm">No hay leads aún. Cuando alguien interactúe con Proteus, aparecerán aquí.</p>
+            <p className="text-white/30 text-sm">
+              {leads.length === 0
+                ? 'No hay leads aún. Cuando alguien interactúe con Proteus, aparecerán aquí.'
+                : 'Ningún lead coincide con los filtros actuales.'}
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {[...leads].reverse().map((lead) => (
+            {filteredLeads.map((lead) => (
               <div
                 key={lead.id}
                 className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-5 hover:border-blue-500/20 transition-all"
@@ -114,7 +243,7 @@ export default function LeadsPage() {
                 <div className="flex items-start justify-between gap-4 flex-wrap">
                   {/* Left: Contact info */}
                   <div className="flex-1 min-w-[200px]">
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-3 mb-2 flex-wrap">
                       <span className="text-lg font-semibold text-white">{lead.name}</span>
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full font-mono ${
@@ -127,12 +256,43 @@ export default function LeadsPage() {
                       >
                         {lead.score}/10
                       </span>
+                      <button
+                        onClick={() => cycleStatus(lead)}
+                        title="Click para avanzar el status"
+                        className={`text-[10px] px-2 py-0.5 rounded-full font-mono border transition-all hover:scale-105 ${STATUS_STYLE[lead.status]}`}
+                      >
+                        {STATUS_LABEL[lead.status]}
+                      </button>
                     </div>
                     <p className="text-sm text-white/50">{lead.email}</p>
                     {lead.phone && <p className="text-sm text-white/40">{lead.phone}</p>}
                     <p className="text-xs text-white/25 mt-1">
                       {new Date(lead.timestamp).toLocaleString('es-CO')} · {lead.action}
                     </p>
+
+                    {/* Quick actions */}
+                    <div className="flex gap-2 mt-3">
+                      {lead.phone && (
+                        <a
+                          href={`https://wa.me/${lead.phone.replace(/[^\d]/g, '')}?text=${encodeURIComponent(
+                            `Hola ${lead.name}, soy Daniel de Proteus. Vi tu mensaje sobre ${lead.summary || 'tu proyecto'}.`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] px-2 py-1 rounded bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 transition-all"
+                        >
+                          WhatsApp
+                        </a>
+                      )}
+                      {lead.email && (
+                        <a
+                          href={`mailto:${lead.email}?subject=${encodeURIComponent('Proteus — Sobre tu consulta')}&body=${encodeURIComponent(`Hola ${lead.name},\n\n`)}`}
+                          className="text-[10px] px-2 py-1 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all"
+                        >
+                          Email
+                        </a>
+                      )}
+                    </div>
                   </div>
 
                   {/* Right: Profile */}
@@ -144,9 +304,11 @@ export default function LeadsPage() {
                       <span className="text-white/30">Solución:</span> {lead.suggestedSolution}
                     </p>
                     <div className="flex flex-wrap gap-2 mt-2">
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-white/5 text-white/30">
-                        {lead.industry}
-                      </span>
+                      {lead.industry && (
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-white/5 text-white/30">
+                          {lead.industry}
+                        </span>
+                      )}
                       <span className="text-[10px] px-2 py-0.5 rounded bg-white/5 text-white/30">
                         Dolor: {lead.painLevel}
                       </span>
@@ -165,9 +327,59 @@ export default function LeadsPage() {
         )}
 
         <p className="text-center text-[10px] text-white/15 mt-8 font-mono">
-          Auto-refresh cada 15s · Los leads se mantienen hasta el próximo deploy
+          Auto-refresh cada 15s · Persistido en Intel Hub Neon
         </p>
       </div>
+    </div>
+  );
+}
+
+function KpiCard({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string | number;
+  accent?: 'green' | 'blue';
+}) {
+  const accentClass =
+    accent === 'green' ? 'text-green-400' : accent === 'blue' ? 'text-blue-400' : 'text-white';
+  return (
+    <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
+      <div className={`text-2xl font-bold ${accentClass}`}>{value}</div>
+      <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wide">{label}</div>
+    </div>
+  );
+}
+
+function FilterGroup({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <div className="flex items-center gap-1">
+      <span className="text-[10px] text-white/30 font-mono uppercase mr-1">{label}:</span>
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          onClick={() => onChange(opt.value)}
+          className={`text-[10px] px-2 py-1 rounded border transition-all ${
+            value === opt.value
+              ? 'bg-blue-500/20 border-blue-500/40 text-blue-300'
+              : 'bg-white/[0.02] border-white/10 text-white/40 hover:text-white/70'
+          }`}
+        >
+          {opt.label}
+        </button>
+      ))}
     </div>
   );
 }

@@ -15,6 +15,7 @@ export async function POST(req: Request) {
       painLevel: profile?.painLevel || 'unknown',
       infrastructure: profile?.infrastructure || 'unknown',
       authority: profile?.authority || 'unknown',
+      industry: profile?.industry || 'unknown',
       psychProfile: profile?.psychProfile || '',
       salesStrategy: profile?.salesStrategy || '',
       contactAction: action,
