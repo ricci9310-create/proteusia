@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Mirror of Intel Hub's Prospect model — shared DB
+model Prospect {
+  id             String     @id @default(cuid())
+  name           String
+  contactName    String?
+  email          String?
+  phone          String?
+  channel        String?
+  service        String?
+  status         DealStatus
+  value          Float?
+  score          Int?
+  proteusProfile Json?
+  notes          String?
+  nextAction     String?
+  nextActionDate DateTime?
+  updatedAt      DateTime   @updatedAt
+  createdAt      DateTime   @default(now())
+}
+
+enum DealStatus {
+  LEAD
+  CONTACTED
+  PROPOSAL_SENT
+  NEGOTIATION
+  WON
+  LOST
+}
