@@ -3,14 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --bg: #030308;
-  --proteus-gold: #c9b88a;
-  --proteus-amber: #e0d0a8;
-  --proteus-warm: #a89868;
+  --bg: #FAFBFC;
+  --bg-warm: #F5F1E8;
+  --ink: #1A1A2E;
+  --ink-soft: #4A4A6A;
+  --ink-muted: #6B7280;
+  --proteus-gold: #C5A55A;
+  --proteus-gold-deep: #A8862F;
+  --proteus-gold-light: #E8D9A8;
 }
 
 body {
-  color: #f0f0f5;
+  color: var(--ink);
   background: var(--bg);
   overflow-x: hidden;
 }
@@ -30,12 +34,12 @@ html {
 /* ========== BREATHING INPUT ========== */
 @keyframes breathe {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(200, 190, 160, 0.08), 0 0 60px rgba(200, 190, 160, 0.03);
-    border-color: rgba(200, 190, 160, 0.15);
+    box-shadow: 0 4px 24px rgba(197, 165, 90, 0.10), 0 0 60px rgba(197, 165, 90, 0.05);
+    border-color: rgba(197, 165, 90, 0.25);
   }
   50% {
-    box-shadow: 0 0 30px rgba(200, 190, 160, 0.2), 0 0 80px rgba(200, 190, 160, 0.08);
-    border-color: rgba(200, 190, 160, 0.35);
+    box-shadow: 0 6px 36px rgba(197, 165, 90, 0.22), 0 0 90px rgba(197, 165, 90, 0.10);
+    border-color: rgba(197, 165, 90, 0.55);
   }
 }
 
@@ -45,8 +49,8 @@ html {
 
 .input-breathing:focus {
   animation: none;
-  box-shadow: 0 0 40px rgba(200, 190, 160, 0.25), 0 0 100px rgba(200, 190, 160, 0.1);
-  border-color: rgba(200, 190, 160, 0.45);
+  box-shadow: 0 8px 48px rgba(197, 165, 90, 0.28), 0 0 120px rgba(197, 165, 90, 0.12);
+  border-color: rgba(197, 165, 90, 0.65);
 }
 
 /* ========== TRAVELING LIGHT BORDER (thinking state) ========== */
@@ -68,9 +72,9 @@ html {
     90deg,
     transparent 0%,
     transparent 30%,
-    rgba(200, 190, 160, 0.6) 45%,
-    rgba(224, 215, 185, 0.9) 50%,
-    rgba(200, 190, 160, 0.6) 55%,
+    rgba(197, 165, 90, 0.7) 45%,
+    rgba(168, 134, 47, 1) 50%,
+    rgba(197, 165, 90, 0.7) 55%,
     transparent 70%,
     transparent 100%
   );
@@ -85,7 +89,7 @@ html {
   position: absolute;
   inset: 0;
   border-radius: 1rem;
-  background: #030308;
+  background: #FFFFFF;
   z-index: -1;
   pointer-events: none;
 }
@@ -107,7 +111,7 @@ html {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, #c9b88a, #e8dfc0, #a89868);
+  background-image: linear-gradient(135deg, #1A1A2E 0%, #0F3460 35%, #A8862F 70%, #C5A55A 100%);
 }
 
 /* ========== PULSE RING ========== */
@@ -121,7 +125,7 @@ html {
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 2px solid rgba(200, 190, 160, 0.4);
+  border: 2px solid rgba(168, 134, 47, 0.55);
   animation: pulse-ring 2s ease-out infinite;
 }
 
@@ -137,8 +141,8 @@ html {
 
 /* ========== MORPHING TEXT ========== */
 @keyframes morph-glow {
-  0%, 100% { text-shadow: 0 0 20px rgba(200, 190, 160, 0.3); }
-  50% { text-shadow: 0 0 40px rgba(200, 190, 160, 0.5), 0 0 80px rgba(224, 215, 185, 0.15); }
+  0%, 100% { text-shadow: 0 2px 18px rgba(197, 165, 90, 0.18); }
+  50% { text-shadow: 0 4px 32px rgba(197, 165, 90, 0.35), 0 0 60px rgba(232, 217, 168, 0.20); }
 }
 
 .morph-text {
@@ -148,8 +152,8 @@ html {
 /* ========== SCROLLBAR ========== */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+::-webkit-scrollbar-thumb { background: rgba(26,26,46,0.12); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(26,26,46,0.22); }
 
 /* ========== NOISE OVERLAY ========== */
 .noise::after {
@@ -158,25 +162,27 @@ html {
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.012;
+  opacity: 0.025;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* ========== PORTFOLIO CARDS ========== */
 .portfolio-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(26, 26, 46, 0.08);
   border-radius: 1.25rem;
   overflow: hidden;
   transition: all 0.4s ease;
+  box-shadow: 0 4px 24px rgba(26, 26, 46, 0.04);
 }
 
 .portfolio-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(200, 190, 160, 0.2);
-  box-shadow: 0 20px 60px rgba(200, 190, 160, 0.06);
+  border-color: rgba(197, 165, 90, 0.45);
+  box-shadow: 0 24px 60px rgba(197, 165, 90, 0.18), 0 8px 24px rgba(26, 26, 46, 0.06);
 }
 
 /* ========== SPEAKING INDICATOR ========== */
@@ -202,19 +208,20 @@ html {
   position: relative;
   padding: 16px 32px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(26, 26, 46, 0.10);
+  color: rgba(26, 26, 46, 0.85);
   transition: all 0.3s ease;
   overflow: hidden;
+  box-shadow: 0 2px 12px rgba(26, 26, 46, 0.04);
 }
 
 .cta-btn:hover {
-  background: rgba(200, 190, 160, 0.08);
-  border-color: rgba(200, 190, 160, 0.25);
-  color: #fff;
+  background: #FFFFFF;
+  border-color: rgba(197, 165, 90, 0.55);
+  color: #1A1A2E;
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(200, 190, 160, 0.12);
+  box-shadow: 0 12px 36px rgba(197, 165, 90, 0.22);
 }
 
 /* ========== SCORE METER ========== */

@@ -28,7 +28,7 @@ export default function MorphingTitle() {
   }, []);
 
   return (
-    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
+    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-[#1A1A2E] leading-tight tracking-tight">
       Nos transformamos en
       <br />
       <span

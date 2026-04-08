@@ -10,7 +10,7 @@ export default function SpeakingIndicator() {
         <div className="sound-bar" />
         <div className="sound-bar" />
       </div>
-      <span className="text-xs text-amber-400/50 font-mono ml-2">Proteus está hablando...</span>
+      <span className="text-xs text-[#A8862F] font-mono ml-2">Proteus está hablando...</span>
     </div>
   );
 }

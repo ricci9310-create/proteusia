@@ -27,7 +27,7 @@ export default function Home() {
             {chatStarted && (
               <button
                 onClick={handleReset}
-                className="fixed top-6 left-6 z-50 flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white/30 hover:text-white/60 hover:border-white/15 transition-all text-xs"
+                className="fixed top-6 left-6 z-50 flex items-center gap-2 px-3 py-2 rounded-lg bg-white/80 backdrop-blur border border-[#1A1A2E]/10 text-[#1A1A2E]/55 hover:text-[#1A1A2E] hover:border-[#C5A55A]/55 hover:bg-white transition-all text-xs shadow-sm"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -40,8 +40,8 @@ export default function Home() {
             {!chatStarted && (
               <div className="text-center mb-8 chat-message-enter">
                 <div className="inline-flex items-center gap-2 mb-6">
-                  <div className="w-2 h-2 rounded-full bg-amber-400 pulse-ring relative" />
-                  <span className="text-xs tracking-[0.2em] uppercase text-white/30 font-mono">
+                  <div className="w-2 h-2 rounded-full bg-[#A8862F] pulse-ring relative" />
+                  <span className="text-xs tracking-[0.2em] uppercase text-[#1A1A2E]/55 font-mono">
                     PROTEUS IA
                   </span>
                 </div>
@@ -60,7 +60,7 @@ export default function Home() {
             {!chatStarted && (
               <button
                 onClick={() => setShowPortfolio(true)}
-                className="mt-8 text-sm text-white/30 hover:text-white/60 transition-colors duration-300 underline underline-offset-4 decoration-white/10 hover:decoration-white/30"
+                className="mt-8 text-sm text-[#1A1A2E]/50 hover:text-[#A8862F] transition-colors duration-300 underline underline-offset-4 decoration-[#1A1A2E]/15 hover:decoration-[#C5A55A]/60"
               >
                 Ver nuestros trabajos
               </button>

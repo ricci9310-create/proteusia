@@ -159,14 +159,14 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
               }`}
             >
               <div
-                className={`max-w-[85%] px-5 py-3 rounded-2xl text-sm leading-relaxed ${
+                className={`max-w-[85%] px-5 py-3 rounded-2xl text-sm leading-relaxed shadow-sm backdrop-blur ${
                   msg.role === 'user'
-                    ? 'bg-amber-500/15 text-white/90 rounded-br-md border border-amber-500/20'
-                    : 'bg-white/[0.04] text-white/80 rounded-bl-md border border-white/[0.06]'
+                    ? 'bg-[#C5A55A]/15 text-[#1A1A2E] rounded-br-md border border-[#C5A55A]/45'
+                    : 'bg-white/85 text-[#1A1A2E]/85 rounded-bl-md border border-[#1A1A2E]/[0.08]'
                 }`}
               >
                 {msg.role === 'proteus' && (
-                  <span className="text-xs text-amber-400/60 font-mono block mb-1">PROTEUS</span>
+                  <span className="text-xs text-[#A8862F] font-mono block mb-1">PROTEUS</span>
                 )}
                 {msg.content}
               </div>
@@ -175,12 +175,12 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
 
           {isLoading && (
             <div className="flex justify-start chat-message-enter">
-              <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl rounded-bl-md px-5 py-3">
-                <span className="text-xs text-amber-400/60 font-mono block mb-2">PROTEUS</span>
+              <div className="bg-white/85 backdrop-blur border border-[#1A1A2E]/[0.08] rounded-2xl rounded-bl-md px-5 py-3 shadow-sm">
+                <span className="text-xs text-[#A8862F] font-mono block mb-2">PROTEUS</span>
                 <div className="flex gap-1.5 items-center h-5">
-                  <div className="typing-dot w-2 h-2 rounded-full bg-amber-400/60" />
-                  <div className="typing-dot w-2 h-2 rounded-full bg-amber-400/60" />
-                  <div className="typing-dot w-2 h-2 rounded-full bg-amber-400/60" />
+                  <div className="typing-dot w-2 h-2 rounded-full bg-[#A8862F]" />
+                  <div className="typing-dot w-2 h-2 rounded-full bg-[#A8862F]" />
+                  <div className="typing-dot w-2 h-2 rounded-full bg-[#A8862F]" />
                 </div>
               </div>
             </div>
@@ -214,18 +214,18 @@ export default function ProteusChat({ onChatStart, onShowPortfolio }: Props) {
                 ? '¿En qué quieres que nos transformemos para tu negocio?'
                 : 'Escribe tu respuesta...'
             }
-            className={`w-full bg-[#030308] border border-white/10 rounded-2xl px-6 py-5 pr-14 text-white placeholder-white/25 text-sm text-center focus:outline-none transition-all duration-500 ${
+            className={`w-full bg-white/90 backdrop-blur border border-[#1A1A2E]/12 rounded-2xl px-6 py-5 pr-14 text-[#1A1A2E] placeholder-[#1A1A2E]/40 text-sm text-center focus:outline-none transition-all duration-500 ${
               messages.length === 0 && !isLoading ? 'input-breathing' : ''
-            } ${!isLoading ? 'focus:border-amber-500/40 focus:shadow-[0_0_30px_rgba(212,168,83,0.12)]' : 'border-transparent'}`}
+            } ${!isLoading ? 'focus:border-[#C5A55A]/65 focus:shadow-[0_8px_36px_rgba(197,165,90,0.22)]' : 'border-transparent'}`}
             disabled={isLoading}
             autoFocus
           />
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-amber-500/15 z-10"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-[#C5A55A]/20 hover:bg-[#C5A55A]/35 flex items-center justify-center transition-all disabled:opacity-30 disabled:hover:bg-[#C5A55A]/20 z-10"
           >
-            <svg className="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 text-[#A8862F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </button>

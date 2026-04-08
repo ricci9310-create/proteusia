@@ -80,17 +80,17 @@ export default function Portfolio({ onBack }: Props) {
       <div className="text-center mb-12">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 text-sm text-white/30 hover:text-white/60 transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-sm text-[#1A1A2E]/55 hover:text-[#A8862F] transition-colors mb-8"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Volver a Proteus
         </button>
-        <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+        <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] mb-3">
           Nuestras <span className="gradient-text">transformaciones</span>
         </h2>
-        <p className="text-white/40 text-sm max-w-lg mx-auto">
+        <p className="text-[#1A1A2E]/55 text-sm max-w-lg mx-auto">
           Cada proyecto empezó como una idea. Proteus le dio forma.
         </p>
       </div>
@@ -108,16 +108,16 @@ export default function Portfolio({ onBack }: Props) {
             <div className="text-2xl mb-3">{project.icon}</div>
 
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-[10px] uppercase tracking-wider text-white/30 font-mono">
+              <span className="text-[10px] uppercase tracking-wider text-[#A8862F] font-mono">
                 {project.industry}
               </span>
-              <span className="text-white/10">·</span>
-              <span className="text-[10px] text-white/20">{project.location}</span>
+              <span className="text-[#1A1A2E]/20">·</span>
+              <span className="text-[10px] text-[#1A1A2E]/45">{project.location}</span>
             </div>
 
-            <h3 className="text-lg font-semibold text-white/90 mb-2">{project.title}</h3>
+            <h3 className="text-lg font-semibold text-[#1A1A2E] mb-2">{project.title}</h3>
 
-            <p className="text-xs text-white/40 leading-relaxed mb-4">
+            <p className="text-xs text-[#1A1A2E]/65 leading-relaxed mb-4">
               {project.description}
             </p>
 
@@ -126,7 +126,7 @@ export default function Portfolio({ onBack }: Props) {
               {project.metrics.map((metric, j) => (
                 <span
                   key={j}
-                  className="text-[10px] px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.06] text-white/40"
+                  className="text-[10px] px-2.5 py-1 rounded-full bg-[#1A1A2E]/[0.04] border border-[#1A1A2E]/[0.08] text-[#1A1A2E]/65"
                 >
                   {metric}
                 </span>
@@ -138,7 +138,7 @@ export default function Portfolio({ onBack }: Props) {
               {project.tags.map((tag, j) => (
                 <span
                   key={j}
-                  className="text-[9px] px-2 py-0.5 rounded bg-amber-500/5 text-amber-400/40 font-mono"
+                  className="text-[9px] px-2 py-0.5 rounded bg-[#C5A55A]/12 text-[#A8862F] font-mono"
                 >
                   {tag}
                 </span>
@@ -152,7 +152,7 @@ export default function Portfolio({ onBack }: Props) {
       <div className="text-center mt-12">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-400/80 hover:bg-amber-500/20 hover:text-amber-300 transition-all"
+          className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-[#1A1A2E] border border-[#A8862F]/40 text-sm text-white hover:bg-[#0F3460] hover:shadow-[0_12px_36px_rgba(197,165,90,0.32)] transition-all"
         >
           Quiero algo así — hablar con Proteus
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
