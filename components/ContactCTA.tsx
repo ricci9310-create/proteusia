@@ -27,10 +27,11 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
 
   const handleSubmit = async () => {
     if (!contactInfo.name || !contactInfo.email) return;
+    if (selectedAction === 'call' && !contactInfo.phone) return;
     setIsSubmitting(true);
 
     try {
-      await fetch('/api/lead', {
+      const res = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -39,6 +40,12 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
           profile: leadProfile,
         }),
       });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Server error');
+      }
+
       setSubmitted(true);
     } catch {
       alert('Error al enviar. Intenta de nuevo.');
@@ -111,7 +118,7 @@ export default function ContactCTA({ leadProfile, onShowPortfolio }: Props) {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={!contactInfo.name || !contactInfo.email || isSubmitting}
+            disabled={!contactInfo.name || !contactInfo.email || (selectedAction === 'call' && !contactInfo.phone) || isSubmitting}
             className="flex-1 py-3 rounded-xl text-sm text-white bg-[#1A1A2E] hover:bg-[#0F3460] border border-[#A8862F]/40 hover:shadow-[0_8px_28px_rgba(197,165,90,0.35)] transition-all disabled:opacity-40"
           >
             {isSubmitting ? 'Enviando...' : 'Enviar'}
